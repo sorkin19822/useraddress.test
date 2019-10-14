@@ -53,7 +53,7 @@ AppAsset::register($this);
             )
             . Html::endForm()
             . '</li><li>'.Html::a('Пользователи', ['site/all-users'], ['class' => 'profile-link']).'</li>'
-            . '</li><li>'.Html::a('Мои адреса', ['site/user-index'], ['class' => 'profile-link']).'</li>';
+            . '</li><li>'.Html::a('Мои адреса', ['post/user-index'], ['class' => 'profile-link']).'</li>';
     }
 
     echo Nav::widget([
