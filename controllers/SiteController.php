@@ -5,12 +5,16 @@ namespace app\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
+use app\models\Post;
 use app\models\SignupForm;
+use yii\widgets\ListView;
+use yii\data\ActiveDataProvider;
 
 class SiteController extends Controller
 {
@@ -22,10 +26,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['logout','all-users'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout','all-users'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -67,6 +71,72 @@ class SiteController extends Controller
     }
 
     /**
+     * @return string
+     */
+    public function actionAllUsers()
+    {
+
+        return $this->render('allusers');
+    }
+
+    /**
+     * Displays a single Post model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Updates an existing Post model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Deletes an existing User model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['all-users']);
+    }
+
+    protected function findModel($id)
+    {
+        if (($model = User::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
      * Login action.
      *
      * @return Response|string
@@ -79,7 +149,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(['all-users']);
         }
 
         $model->password = '';
@@ -153,21 +223,27 @@ class SiteController extends Controller
 
     public function actionSignup()
     {
-        $model = new SignupForm();
-
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
+        $userProfile = new SignupForm();
+        $post = new Post();
+        $isPost = $userProfile->load(Yii::$app->request->post()) && $post->load(Yii::$app->request->post());
+        if ($isPost) {
+            $isValidate = $userProfile->validate() && $post->validate();
+            if ($isValidate) {
+                $user = $userProfile->signup();
+                $post->setIdUser($user->getId());
+                $post->save(false);
                 if (Yii::$app->getUser()->login($user)) {
                     Yii::$app->session->setFlash('success', "Спасибо ".
-                        $model->f_name.' '.$model->l_name
+                        $userProfile->f_name.' '.$userProfile->l_name
                         .", Ваши данные сохранены");
-                    return $this->goHome();
+                    return $this->redirect(['all-users']);
                 }
             }
         }
 
         return $this->render('signup', [
-            'model' => $model,
+            'userProfile' => $userProfile,
+            'post' => $post,
         ]);
     }
 }

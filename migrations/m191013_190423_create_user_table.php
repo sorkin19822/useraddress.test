@@ -32,6 +32,7 @@ class m191013_190423_create_user_table extends Migration
             'l_name' => $this->string(50)->notNull(),
             'gender' => $this->smallInteger(3)->notNull(),
         ],$tableOptions);
+        $this->alterColumn('user', 'id', $this->integer(12).' NOT NULL AUTO_INCREMENT');
     }
 
     /**

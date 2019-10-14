@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%post}}`.
  */
-class m191013_180151_create_post_table extends Migration
+class m191013_190551_create_post_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -19,7 +19,7 @@ class m191013_180151_create_post_table extends Migration
 
         $this->createTable('post', [
             'id' => $this->primaryKey(),
-            'id_user' => $this->integer()->notNull(),
+            'id_user' => $this->integer(),
             'post_index' => $this->string()->notNull(),
             'country_code' => $this->string(2)->notNull(),
             'town' => $this->string()->notNull(),
@@ -27,6 +27,17 @@ class m191013_180151_create_post_table extends Migration
             'num_build' => $this->string()->notNull(),
             'num_office' => $this->string()
         ], $tableOptions);
+
+        $this->alterColumn('post', 'id', $this->integer(12).' NOT NULL AUTO_INCREMENT');
+
+        $this->addForeignKey(
+            'post_to_user',
+            'post',
+            'id_user',
+            'user',
+            'id',
+            'CASCADE'
+        );
     }
 
     /**
@@ -35,5 +46,6 @@ class m191013_180151_create_post_table extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%post}}');
+
     }
 }

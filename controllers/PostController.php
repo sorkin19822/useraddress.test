@@ -8,6 +8,8 @@ use app\models\PostSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
+
 
 /**
  * PostController implements the CRUD actions for Post model.
@@ -43,6 +45,43 @@ class PostController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    /**
+     * Lists all Post models.
+     * @return mixed
+     */
+    public function actionUserIndex()
+    {
+        $idUser = Yii::$app->getUser()->getId();
+            $dataProvider = new ActiveDataProvider([
+                'query' => Post::find()->where(['id_user' => $idUser]), // Запрос на выборку опубликованных новостей
+                'sort' => [ // сортировка по умолчанию
+                    'defaultOrder' => ['town' => SORT_DESC, 'street' => SORT_DESC, 'post_index' => SORT_DESC],
+                ],
+                'pagination' => [ // постраничная разбивка
+                    'pageSize' => 10, // 10 новостей на странице
+                ],
+            ]);
+// передача экземпляра класса в представление
+            return $this->render('userindex', ['dataProvider' => $dataProvider]);
+    }
+
+    public function actionUsersIndex($id)
+    {
+        $idUser = $id;
+        $dataProvider = new ActiveDataProvider([
+            'query' => Post::find()->where(['id_user' => $idUser]), // Запрос на выборку опубликованных новостей
+            'sort' => [ // сортировка по умолчанию
+                'defaultOrder' => ['town' => SORT_DESC, 'street' => SORT_DESC, 'post_index' => SORT_DESC],
+            ],
+            'pagination' => [ // постраничная разбивка
+                'pageSize' => 10, // 10 новостей на странице
+            ],
+        ]);
+// передача экземпляра класса в представление
+        return $this->render('userindex', ['dataProvider' => $dataProvider]);
+    }
+
 
     /**
      * Displays a single Post model.

@@ -26,7 +26,7 @@ class SignupForm extends Model
     {
         return [
             [['username','username','email','f_name','l_name'], 'trim'],
-            [['username','username','email','f_name','l_name','gender'],
+            [['username','username','email','f_name','l_name','gender','password'],
                 'required','message' => 'Заполните поле.'],
 
 
@@ -37,7 +37,7 @@ class SignupForm extends Model
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'Этот адрес уже существует.'],
 
-            ['password', 'string', 'min' => 6],
+            ['password', 'string', 'min' => 6,'message' => 'Пароль должен быть длинее 6 символов.'],
 
             ['f_name','trim'],
             ['f_name', 'required'],
@@ -75,6 +75,18 @@ class SignupForm extends Model
         $this->l_name = mb_convert_case($this->l_name, MB_CASE_TITLE, "UTF-8");
         $this->f_name = mb_convert_case($this->f_name, MB_CASE_TITLE, "UTF-8");
         return parent::beforeValidate();
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Логин',
+            'email' => 'Е-маил',
+            'f_name' => 'Имя',
+            'l_name' => 'Фамилия',
+            'gender' => 'Пол',
+            'password' => 'Пароль',
+        ];
     }
 
 

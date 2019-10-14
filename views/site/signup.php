@@ -16,36 +16,52 @@ $this->params['breadcrumbs'][] = $this->title;
         <p>Заполните поля для регистрации:</p>
     </div>
 
-    <div class="row">
-        <div class="center-block col-md-5">
+    <div >
+
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
-            <div class="row">
+        <div class="row bs-example">
+            <div class="center-block col-md-6">
                 <div class="col-md-6">
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true])
-                ->label('Логин')?>
+                    <?= $form->field($userProfile, 'username')->textInput(['autofocus' => true])?>
+                    </div>
+                <div class="col-md-6">
+                    <?= $form->field($userProfile, 'email')?>
+                    </div>
+                <div class="col-md-6">
+                <?= $form->field($userProfile, 'f_name')?>
                 </div>
                 <div class="col-md-6">
-                <?= $form->field($model, 'email')
-                ->label('Е-маил')?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                <?= $form->field($model, 'f_name')
-                    ->label('Имя')?>
-                </div>
-                <div class="col-md-6">
-                <?= $form->field($model, 'l_name')
-                    ->label('Фамилия')?>
+                <?= $form->field($userProfile, 'l_name')?>
                 </div>
                 <div class="col-md-4">
-                    <?= $form->field($model, 'gender')->dropDownList([0 => 'Нет', 1 => 'М', 2 => 'Ж'])
-                        ->label('Пол')?>
+                    <?= $form->field($userProfile, 'gender')->dropDownList([0 => 'Нет', 1 => 'М', 2 => 'Ж'])?>
+                </div>
+                <div class="col-md-12">
+                <?= $form->field($userProfile, 'password')->passwordInput()?>
                 </div>
             </div>
+            <div class="center-block col-md-6 row">
+                <div class="col-md-6">
+                    <?= $form->field($post, 'post_index')?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($post, 'country_code')?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($post, 'town')?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($post, 'street')?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($post, 'num_build')?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($post, 'num_office')?>
+                </div>
+            </div>
+        </div>
 
-                <?= $form->field($model, 'password')->passwordInput()
-                    ->label('Пароль') ?>
 
                 <div class="form-group">
                     <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>

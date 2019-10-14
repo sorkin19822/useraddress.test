@@ -32,10 +32,10 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_user', 'post_index', 'country_code', 'town', 'street', 'num_build'], 'required'],
-            [['id_user'], 'integer'],
-            [['post_index', 'town', 'street', 'num_build', 'num_office'], 'string', 'max' => 255],
+            [['post_index', 'country_code', 'town', 'street', 'num_build','num_office'], 'required','message' => 'Заполните поле.'],
+            [['town', 'street', 'num_build', 'num_office'], 'string', 'max' => 255],
             [['country_code'], 'string', 'max' => 2],
+            [['post_index'], 'integer', 'message' => 'Почтовый индекс, целые числа'],
         ];
     }
 
@@ -47,12 +47,18 @@ class Post extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'id_user' => 'Id User',
-            'post_index' => 'Post Index',
-            'country_code' => 'Country Code',
-            'town' => 'Town',
-            'street' => 'Street',
-            'num_build' => 'Num Build',
-            'num_office' => 'Num Office',
+            'post_index' => 'Почтовый индекс',
+            'country_code' => 'код страны',
+            'town' => 'Город',
+            'street' => 'Улица',
+            'num_build' => 'Номер дома',
+            'num_office' => 'Номер офиса',
         ];
     }
+
+    public function setIdUser($userId){
+        $this->id_user = $userId;
+    }
+
+
 }
