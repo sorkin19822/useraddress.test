@@ -1,3 +1,18 @@
+<ul>
+<li>
+Добавление нового пользователя реализовано через регистрацию</br>
+http://useraddress.test/web/site/signup
+</li>
+<li>
+Вход user5 123456</br>
+http://useraddress.test/web/site/login
+</li>
+<li>
+Список пользователей </br> Здесь же некоторые операции CRUD, часть не успел</br>
+http://useraddress.test/web/site/all-users
+</li>
+</ul>
+
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
